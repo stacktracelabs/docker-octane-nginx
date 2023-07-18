@@ -10,7 +10,8 @@ LABEL maintainer="Peter Stovka <ps@stacktrace.sk>"
 
 ENV BUILD_PHP_VERSION=$PHP_VERSION \
     MSMTP_RELAY_SERVER_HOSTNAME="mailhog" \
-    MSMTP_RELAY_SERVER_PORT="1025"
+    MSMTP_RELAY_SERVER_PORT="1025" \
+    OCTANE_SERVER="swoole"
 
 # install`nginx` (web server) & `msmtp` (smtp client) & swoole
 RUN apt-get update \
