@@ -1,11 +1,9 @@
 name: Docker Publish (Production Images)
 
 on:
-  workflow_dispatch:
-  release:
-    types: [released]
-  schedule:
-    - cron: '0 8 * * 2'
+  push:
+    branches:
+      - main
 
 jobs:
   octane-nginx:
