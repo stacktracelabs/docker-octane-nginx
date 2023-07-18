@@ -7,7 +7,8 @@ FROM ${BASE_IMAGE}
 LABEL maintainer="Peter Stovka <ps@stacktrace.sk>"
 
 ENV MSMTP_RELAY_SERVER_HOSTNAME="mailhog" \
-    MSMTP_RELAY_SERVER_PORT="1025"
+    MSMTP_RELAY_SERVER_PORT="1025" \
+    PHP_VERSION=${PHP_VERSION}
 
 # install`nginx` (web server) & `msmtp` (smtp client) & swoole
 RUN apt-get update \
