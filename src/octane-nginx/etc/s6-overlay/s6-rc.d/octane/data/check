@@ -1,0 +1,2 @@
+#!/command/with-contenv bash
+/usr/bin/php /var/www/html/artisan octane:status
