@@ -4,18 +4,21 @@ ARG BASE_IMAGE="serversideup/php:${UPSTREAM_CHANNEL}${PHP_VERSION}-cli"
 
 FROM ${BASE_IMAGE}
 
+ARG PHP_VERSION='8.2'
+
 LABEL maintainer="Peter Stovka <ps@stacktrace.sk>"
 
-ENV MSMTP_RELAY_SERVER_HOSTNAME="mailhog" \
+ENV BUILD_PHP_VERSION=$PHP_VERSION \
+    MSMTP_RELAY_SERVER_HOSTNAME="mailhog" \
     MSMTP_RELAY_SERVER_PORT="1025"
 
 # install`nginx` (web server) & `msmtp` (smtp client) & swoole
 RUN apt-get update \
     && apt-get -y --no-install-recommends install \
+        php${BUILD_PHP_VERSION}-swoole \
         msmtp \
         msmtp-mta \
         nginx \
-        php${PHP_VERSION}-swoole \
     \
     # ensure web permissions are correct
     && chown -R webuser:webgroup /var/www/html/ \
