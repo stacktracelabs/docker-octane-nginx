@@ -15,7 +15,7 @@ RUN apt-get update \
         msmtp \
         msmtp-mta \
         nginx \
-        php8.2-swoole \
+        php${PHP_VERSION}-swoole \
     \
     # ensure web permissions are correct
     && chown -R webuser:webgroup /var/www/html/ \
