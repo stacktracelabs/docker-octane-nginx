@@ -36,6 +36,26 @@ jobs:
         if: inputs.checkout-type  == 'branch'
         with:
           ref: ${{ steps.branch-name.outputs.current_branch }}
+      
+      ##
+      # Checkout latest stable release (for production releases)
+      ##
+      - name: Get latest stable release
+        if: inputs.checkout-type  == 'latest-stable'
+        id: latest-stable-version
+        run: |
+          echo "LATEST_STABLE_VERSION=$(curl --silent --header "Accept: application/vnd.github.v3.sha" "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')" >> $GITHUB_OUTPUT
+
+      - name: Confirm release tag
+        if: inputs.checkout-type  == 'latest-stable'
+        run: |
+          echo "Latest Stable Release Tag: ${{ steps.latest-stable-version.outputs.LATEST_STABLE_VERSION }}"
+        
+      - name: Checkout latest stable tag
+        if: inputs.checkout-type  == 'latest-stable'
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ steps.latest-stable-version.outputs.LATEST_STABLE_VERSION }}
 
       ##
       # Docker build & publish
@@ -58,7 +78,7 @@ jobs:
 
       - name: "🚀 Set docker tags: Release"
         if: inputs.checkout-type == 'latest-stable'
-        run: echo "DOCKER_TAGS=stacktracelabs/php:${{ inputs.tag-prefix}}${{ matrix.php-version }}-${{ inputs.php-variation }}" >> $GITHUB_ENV
+        run: echo "DOCKER_TAGS=stacktracelabs/php:${{ inputs.tag-prefix}}${{ matrix.php-version }}-${{ inputs.php-variation }}, stacktracelabs/php:${{ inputs.tag-prefix}}${{ matrix.php-version }}-${{ inputs.php-variation }}-${{ steps.latest-stable-version.outputs.LATEST_STABLE_VERSION }}" >> $GITHUB_ENV
 
       - name: Build and push
         uses: docker/build-push-action@v3
