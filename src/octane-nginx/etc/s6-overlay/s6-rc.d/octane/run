@@ -1,4 +1,4 @@
 #!/command/execlineb -P
 with-contenv
 s6-notifyoncheck -d
-/usr/bin/php /var/www/html/artisan octane:start
+su webuser -c "/usr/bin/php /var/www/html/artisan octane:start"
